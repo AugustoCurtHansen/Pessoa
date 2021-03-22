@@ -1,0 +1,77 @@
+REST - Representational State Transfer
+======================================
+
+       Recursos: 
+       
+              Aluno (/aluno)
+              Usuario (/usuario)  
+              Produto (/produto)
+         
+         URI:      
+              /algumaCoisa = Identificador de Recurso (URI)
+              
+        Manipulação dos Recursos: 
+        
+        Verbos HTTP (Métodos): 
+        
+       Consultas   GET/aluno
+       Criar Novo  POST/aluno 
+       Alterar     PUT/aluno
+       Apagar      DELETE/aluno 
+       
+       
+       Representação dos Recursos
+       ==========================
+       
+       JSON 
+       "aluno": {
+                 "nome" : "Joao"
+                 "email : "jaoa@email.com"
+                }  
+       
+       XML:
+       
+       <aluno>
+          <nome>Joao</nome>
+          <email>Joao@email.com</email>   
+       </aluno>       
+       
+       
+       HMTL, TXT, BInario, CSV, etc...
+       
+       
+       Comunicação Stateless
+       =====================
+       
+         - Não tem sessão para guardar dados dos usuarios
+           logados; 
+       
+       
+Trabalhando com persistencia - Spring Data
+===========================================
+
+   JPA 
+   
+   1. Adicionar a dependencia do JPA
+   
+   2. Adicionar a dependecia do Banco de dados 
+   
+   3. Configurar o application.properties
+   
+   4. Transformar as Entidades (Modelo) em entidades JPA
+
+          
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+              
+              

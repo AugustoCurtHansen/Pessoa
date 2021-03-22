@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+        body {
+            background-color: lightgrey;
+            border: 10px solid green;
+            padding: 75px;
+            margin: 20px;
+        }
+
+        div {
+            text-align: center;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        h1 {
+            height: 100px;
+            text-align: center;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        input {
+            padding: 5px 10px;
+        }
+
+        body {
+            background-color: rgb(255, 255, 255);
+        }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Pessoa</title>
+</head>
+
+<body>
+    <form>
+
+        <h1>Formulário</h1>
+
+        <div>
+            <label style=" font-family: Times New Roman, Times, serif;" for="idNome">Nome:</label><br>
+            <input class="" type="text" id="idNome" name="nmNome">
+            <br><br>
+        
+
+        
+            <label for="idSobrenome">Sobrenome:</label><br>
+            <input type="text" id="idSobrenome" name="nmSobrenome">
+            <br><br>
+        
+
+       
+            <label for="idIdade">Idade:</label><br>
+            <input type="number" id="idIdade" name="nmUIdade">
+            <br><br>
+        
+
+
+        
+            <label for="idSexo">Sexo:</label><br><br>
+            <input type="radio" id="idMasculino" name="genero" value="Masculino">
+            <label for="Masculino">Masculino</label><br>
+
+            <input type="radio" id="idFeminino" name="genero" value="Feminino">
+            <label for="Feminino">Feminino</label><br>
+            
+            <input type="radio" id="idOutro" name="genero" value="Outro">
+            <label for="Outro">Outro</label>
+        </div>
+
+        <br><br>
+
+        <div>
+            <input type="button" value="Inserir" onclick="inserir()">
+            <input type="button" value="Buscar User" onclick="buscar()">
+            <input type="reset" value="Excluir" onclick="excluir()">
+            <input type="reset" value="Limpar">
+        </div>
+
+    </form>
+
+    <Script>
+        function inserir() {
+            var url = "http://localhost:8080/pessoas/inserir/";
+
+            var pessoa = {};
+            
+            pessoa.nome          = document.getElementById("idNome").value;
+            pessoa.sobrenome     = document.getElementById("idSobrenome").value;
+            pessoa.idade         = document.getElementById("idIdade").value;
+
+            
+            var sexo = document.getElementsByName("genero");
+            for (var i = 0; i < sexo.length; i++) {
+                if (sexo[i].checked) {
+                    pessoa.sexo = sexo[i].value;
+                }
+            }
+
+            var json = JSON.stringify(pessoa);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == "201") {
+                    var users = JSON.parse(xhr.responseText);
+                    document.getElementById("idNome").value      = "";
+                    document.getElementById("idSobrenome").value = "";
+                    document.getElementById("idIdade").value     = "";
+                    alert("Pessoa adicionada com sucesso!")
+                } else {
+                    alert("Insira todos os dados!");
+                    console.error(users);
+                }
+            }
+            xhr.send(json);
+        }
+
+        function buscar() {
+            var nome = document.getElementById("idNome").value;
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("GET", "http://localhost:8080/pessoas/" + nome);
+
+            xhr.addEventListener("load", function () {
+
+                if (xhr.status == 404) {
+                    alert("Pessoa não encontrada! Certifique-se do nome estar correto!")
+                } else {
+                    var resposta = xhr.responseText;
+                    console.log(xhr.responseText);
+
+                    var pessoa = JSON.parse(resposta);
+
+                    document.getElementById("idNome").value      = pessoa.nome;
+                    document.getElementById("idSobrenome").value = pessoa.sobrenome;
+                    document.getElementById("idIdade").value     = pessoa.idade;
+
+                    var sexo = document.getElementsByName("genero");
+                    for (var i = 0; i < sexo.length; i++) {
+                        if (sexo[i].value == pessoa.sexo) {
+                            sexo[i].checked = true;
+                        }
+                    }
+                }
+            });
+            xhr.send();
+        }
+
+        function excluir() {
+            var idNome = document.getElementById("idNome").value;
+
+            var url = "http://localhost:8080/pessoas/";
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", url + idNome, true);
+            xhr.onload = function () {
+                var resposta = xhr.responseText;
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    console.log(resposta);
+                } else {
+                    console.error(resposta);
+                }
+            }
+            xhr.send(null);
+        }
+
+    </Script>
+
+</body>
+
+</html>
